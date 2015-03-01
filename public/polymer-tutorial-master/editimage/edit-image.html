@@ -1,0 +1,62 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<script src="caman.full.min.js"></script>
+
+
+        <!-- build:js(app) scripts/components.js -
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+      -->
+
+
+<polymer-element name="edit-image" attributes="imageSrc">
+  <template>
+
+    <style>
+    :host {
+      display: block;
+      width: 100%;
+    }
+    img {
+      margin-bottom: 30px;
+      display: none
+    }
+    canvas{
+      margin-bottom: 30px;
+    }
+    </style>
+    
+    <div layout vertical center>
+      <img data-caman="" id="image" src="{{imageSrc}}" />
+      <canvas id="canvas" />
+    </div>
+    <div >
+      <span>Brithnes</span><br/>
+      <button on-tap="{{resetBrithnes}}">Restore</button>
+      <input id="range" type="range" min="-100" max="100" step="1" value="0" data-filter="brightness" on-change="{{changeValue}}">
+    </div>
+
+  </template>
+  <script>  
+  Polymer({
+    imageSrc: '',
+    camanImg: undefined,
+    ready: function(){
+      debugger;
+      //var src = imageSrc;
+      camanImg = Caman(this.$.canvas, this.imageSrc, function () {
+        this.render();
+      });
+    },
+    changeValue: function(c) {
+      debugger;
+      console.log('change:'+c.target.value+' , ' + camanImg.brightness);
+
+      camanImg.revert();
+      camanImg.brightness(c.target.value).render();
+    },
+    resetBrithnes: function() {
+      this.$.range.value = 0;
+      camanImg.revert();
+    }
+  });
+  </script>
+</polymer-element>
